@@ -1,29 +1,27 @@
 # BO-LANG (Bo Programming Language)
 
-BoLang is a programming language built in Go. It's a simple language designed for learning purposes.
+> BoLang is a programming language built in Go. It's a simple language designed for learning purposes.
 
-## Project Structure
+This project is inspired by the book [Writing An Interpreter In Go](https://interpreterbook.com/) by Thorsten Ball. The goal is to build a simple programming language that can be used to learn about programming language design and implementation. The language is called BoLang, named after my cat Bo. BoLang is a simple language that supports arithmetic operations, variables, functions, and control structures. The language is interpreted and implemented in Go. The interpreter is a work in progress and new features will be added over time.
 
-The project is organized into several packages:
+> **Note:** This project is a work in progress and is not yet complete. The interpreter is still under development and new features will be added over time.
 
-- [`ast`](command:_github.copilot.openSymbolInFile?%5B%22ast%2Fast.go%22%2C%22ast%22%5D "ast/ast.go"): Contains the abstract syntax tree definitions for the language.
-- [`lexer`](command:_github.copilot.openSymbolInFile?%5B%22lexer%2Flexer.go%22%2C%22lexer%22%5D "lexer/lexer.go"): Contains the lexer which converts source code into tokens.
-- [`parser`](command:_github.copilot.openSymbolInFile?%5B%22parser%2Fparser.go%22%2C%22parser%22%5D "parser/parser.go"): Contains the parser which converts tokens into an abstract syntax tree.
-- [`repl`](command:_github.copilot.openSymbolInFile?%5B%22repl%2Frepl.go%22%2C%22repl%22%5D "repl/repl.go"): Contains the Read-Eval-Print Loop (REPL) for interactive use of the language.
-- [`token`](command:_github.copilot.openSymbolInFile?%5B%22token%2Ftoken.go%22%2C%22token%22%5D "token/token.go"): Contains the definitions of the language's tokens.
+## Features
 
-## Running the REPL
+- [x] Arithmetic operations
+- [x] Variables
+- [x] Functions
+- [x] Control structures (if, else, for, forever)
+- [x] Comments
+- [x] Error handling
+- [x] Coming soon...
 
-You can start the REPL by running the [`main.go`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FUsers%2Ffathurrohman%2FCode%2Fbolang%2Fmain.go%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%5D "/Users/fathurrohman/Code/bolang/main.go") file. Once the REPL is running, you can type in BoLang code and see the resulting abstract syntax tree.
+## Resources
 
-The REPL supports a few commands:
-
-- `!help`: Prints a help message.
-- `!exit`: Exits the REPL.
-
-## Error Handling
-
-If there are any errors in parsing the code, the REPL will print an error message.
+- [Writing An Interpreter In Go](https://interpreterbook.com/): A book by Thorsten Ball that walks through building an interpreter in Go.
+- [The Go Programming Language](https://www.gopl.io/): A book by Alan A. A. Donovan and Brian W. Kernighan that covers the Go programming language.
+- [Writing A Compiler In Go](https://compilerbook.com/): A book by Thorsten Ball that walks through building a compiler in Go.
+- [The Dragon Book](https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools): A book by Alfred V. Aho, Monica S. Lam, Ravi Sethi, and Jeffrey D. Ullman that covers compiler design.
 
 ## Contributing
 
