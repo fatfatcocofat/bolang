@@ -203,6 +203,66 @@ func TestIntegerExpression(t *testing.T) {
 	}
 }
 
+func TestStringExpression(t *testing.T) {
+	input := `"Bo-Lang is a Go-based programming language."`
+
+	l := lexer.New(input)
+	p := New(l)
+
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if len(program.Statements) != 1 {
+		t.Fatalf("program.Statements does not contain 1 statement. got=%d", len(program.Statements))
+	}
+
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T", program.Statements[0])
+	}
+
+	str, ok := stmt.Expression.(*ast.StringLiteral)
+	if !ok {
+		t.Fatalf("exp not *ast.StringLiteral. got=%T", stmt.Expression)
+	}
+
+	if str.Value != "Bo-Lang is a Go-based programming language." {
+		t.Errorf("str.Value not %s. got=%s", "Bo-Lang is a Go-based programming language.", str.Value)
+	}
+}
+
+func TestBooleanExpression(t *testing.T) {
+	input := `true;`
+
+	l := lexer.New(input)
+	p := New(l)
+
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if len(program.Statements) != 1 {
+		t.Fatalf("program.Statements does not contain 1 statement. got=%d", len(program.Statements))
+	}
+
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T", program.Statements[0])
+	}
+
+	boolean, ok := stmt.Expression.(*ast.Boolean)
+	if !ok {
+		t.Fatalf("exp not *ast.Boolean. got=%T", stmt.Expression)
+	}
+
+	if boolean.Value != true {
+		t.Errorf("boolean.Value not %t. got=%t", true, boolean.Value)
+	}
+
+	if boolean.TokenLiteral() != "true" {
+		t.Errorf("boolean.TokenLiteral not %s. got=%s", "true", boolean.TokenLiteral())
+	}
+}
+
 func TestFloatExpression(t *testing.T) {
 	input := `5.5;`
 

@@ -164,6 +164,24 @@ func (il *IntegerLiteral) String() string {
 
 func (il *IntegerLiteral) expressionNode() {}
 
+// StringLiteral represents a string literal in the AST.
+type StringLiteral struct {
+	Token token.Token
+	Value string
+}
+
+// TokenLiteral returns the literal value of the token associated with the node.
+func (sl *StringLiteral) TokenLiteral() string {
+	return sl.Token.Literal
+}
+
+// String returns a string representation of the string literal.
+func (sl *StringLiteral) String() string {
+	return sl.Token.Literal
+}
+
+func (sl *StringLiteral) expressionNode() {}
+
 // FloatLiteral represents a float literal in the AST.
 type FloatLiteral struct {
 	Token token.Token

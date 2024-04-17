@@ -3,6 +3,7 @@ package repl
 import (
 	"bolang/evaluator"
 	"bolang/lexer"
+	"bolang/object"
 	"bolang/parser"
 	"os"
 	"strings"
@@ -44,6 +45,8 @@ func New(stdin, stdout, stderr *os.File) *Repl {
 func (r *Repl) Start() {
 	defer r.rl.Close()
 
+	env := object.NewEnvironment()
+
 	for {
 		line, err := r.rl.Readline()
 		if err != nil {
@@ -79,7 +82,7 @@ func (r *Repl) Start() {
 				continue
 			}
 
-			evaluated := evaluator.Eval(program)
+			evaluated := evaluator.Eval(program, env)
 			if evaluated != nil {
 				r.stdoutWrite(evaluated.Inspect())
 				r.stdoutWrite("\n")

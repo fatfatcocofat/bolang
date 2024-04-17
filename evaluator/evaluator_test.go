@@ -38,8 +38,9 @@ func testEval(input string) object.Object {
 	l := lexer.New(input)
 	p := parser.New(l)
 	program := p.ParseProgram()
+	env := object.NewEnvironment()
 
-	return Eval(program)
+	return Eval(program, env)
 }
 
 func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
@@ -50,6 +51,34 @@ func testIntegerObject(t *testing.T, obj object.Object, expected int64) bool {
 	}
 	if result.Value != expected {
 		t.Errorf("object has wrong value. got=%d, want=%d", result.Value, expected)
+		return false
+	}
+	return true
+}
+
+func TestEvalStringExpression(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{`"Hello, World!"`, "Hello, World!"},
+		// {`"Hello" + ", " + "World!"`, "Hello, World!"},
+		// {`"Hello" + ", " + "World" + "!"`, "Hello, World!"},
+	}
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		testStringObject(t, evaluated, tt.expected)
+	}
+}
+
+func testStringObject(t *testing.T, obj object.Object, expected string) bool {
+	result, ok := obj.(*object.String)
+	if !ok {
+		t.Errorf("object is not String. got=%T (%+v)", obj, obj)
+		return false
+	}
+	if result.Value != expected {
+		t.Errorf("object has wrong value. got=%q, want=%q", result.Value, expected)
 		return false
 	}
 	return true
@@ -279,6 +308,10 @@ func TestErrorHandling(t *testing.T) {
 			`,
 			"unknown operator: BOOLEAN + BOOLEAN",
 		},
+		{
+			"foobar",
+			"identifier not found: foobar",
+		},
 	}
 
 	for _, tt := range tests {
@@ -290,6 +323,35 @@ func TestErrorHandling(t *testing.T) {
 		}
 		if errObj.Message != tt.expected {
 			t.Errorf("wrong error message. expected=%q, got=%q", tt.expected, errObj.Message)
+		}
+	}
+}
+
+func TestLetStatements(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		{"let a = 5; a;", 5},
+		{"let a = 5 * 5; a;", 25},
+		{"let a = 5; let b = a; b;", 5},
+		{"let a = 5; let b = a; let c = a + b + 5; c;", 15},
+		{"let name = \"Bo\"; name;", "Bo"},
+		{"let name = \"Bo\"; let b = name; b;", "Bo"},
+		// {"let name = \"Bo\"; let b = name; let c = name + b + \"lang\"; c;", "BoBolang"},
+		// {"let name = \"Bo\"; let b = name; let c = name + b + \"lang\"; let d = c + \"v0.1.0\"; d;", "BoBolangv0.1.0"},
+		{"let a = 5; let b = 5.5; a + b;", 10.5},
+		{"let a = 5; let b = 5.5; a * b;", 27.5},
+		{"let a = 5; let b = 5.5; a / b;", 0.9090909090909091},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		switch expected := tt.expected.(type) {
+		case int:
+			testIntegerObject(t, evaluated, int64(expected))
+		case string:
+			testStringObject(t, evaluated, expected)
 		}
 	}
 }
