@@ -71,6 +71,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.T_LPAREN, p.parseGroupedExpression)
 	p.registerPrefix(token.T_IF, p.parseIfExpression)
 	p.registerPrefix(token.T_FUNCTION, p.parseFunctionLiteral)
+	p.registerPrefix(token.T_LBRACKET, p.parseArrayLiteral)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.T_PLUS, p.parseInfixExpression)
@@ -87,6 +88,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.T_AND, p.parseInfixExpression)
 	p.registerInfix(token.T_OR, p.parseInfixExpression)
 	p.registerInfix(token.T_LPAREN, p.parseCallExpression)
+	p.registerInfix(token.T_LBRACKET, p.parseIndexExpression)
 
 	p.nextToken()
 	p.nextToken()
@@ -217,6 +219,26 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 	}
 
 	return block
+}
+
+func (p *Parser) parseArrayLiteral() ast.Expression {
+	array := &ast.ArrayLiteral{Token: p.currentToken}
+	array.Elements = p.parseExpressionList(token.T_RBRACKET)
+
+	return array
+}
+
+func (p *Parser) parseIndexExpression(left ast.Expression) ast.Expression {
+	exp := &ast.IndexExpression{Token: p.currentToken, Left: left}
+
+	p.nextToken()
+	exp.Index = p.parseExpression(LOWEST)
+
+	if !p.expectPeek(token.T_RBRACKET) {
+		return nil
+	}
+
+	return exp
 }
 
 func (p *Parser) parseFunctionLiteral() ast.Expression {

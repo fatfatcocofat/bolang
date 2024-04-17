@@ -13,3 +13,8 @@ func (b *Builtin) Inspect() string { return "<bo-builtin-fn>" }
 
 // BuiltinFunction represents a built-in function.
 type BuiltinFunction func(args ...Object) Object
+
+// Create a new built-in function.
+func NewBuiltin(fn BuiltinFunction) *Builtin {
+	return &Builtin{Fn: fn}
+}

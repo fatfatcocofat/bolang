@@ -390,3 +390,59 @@ func (ce *CallExpression) String() string {
 }
 
 func (ce *CallExpression) expressionNode() {}
+
+// ArrayLiteral represents an array literal in the AST.
+type ArrayLiteral struct {
+	Token    token.Token
+	Elements []Expression
+}
+
+// TokenLiteral returns the literal value of the token associated with the node.
+func (al *ArrayLiteral) TokenLiteral() string {
+	return al.Token.Literal
+}
+
+// String returns a string representation of the array literal.
+func (al *ArrayLiteral) String() string {
+	var out bytes.Buffer
+
+	elements := []string{}
+	for _, e := range al.Elements {
+		elements = append(elements, e.String())
+	}
+
+	out.WriteString("[")
+	out.WriteString(strings.Join(elements, ", "))
+	out.WriteString("]")
+
+	return out.String()
+}
+
+func (al *ArrayLiteral) expressionNode() {}
+
+// IndexExpression represents an index expression in the AST.
+type IndexExpression struct {
+	Token token.Token
+	Left  Expression
+	Index Expression
+}
+
+// TokenLiteral returns the literal value of the token associated with the node.
+func (ie *IndexExpression) TokenLiteral() string {
+	return ie.Token.Literal
+}
+
+// String returns a string representation of the index expression.
+func (ie *IndexExpression) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("(")
+	out.WriteString(ie.Left.String())
+	out.WriteString("[")
+	out.WriteString(ie.Index.String())
+	out.WriteString("])")
+
+	return out.String()
+}
+
+func (ie *IndexExpression) expressionNode() {}
