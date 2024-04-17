@@ -2,6 +2,7 @@ package evaluator
 
 import (
 	"bolang/ast"
+	"bolang/evaluator/builtins"
 	"bolang/object"
 	"fmt"
 )
@@ -157,7 +158,7 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 		return val
 	}
 
-	if fn, ok := builtinFunctions[node.Value]; ok {
+	if fn, ok := builtins.BuiltinsFn[node.Value]; ok {
 		return fn
 	}
 
