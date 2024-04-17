@@ -516,3 +516,28 @@ func (n *Nil) String() string {
 }
 
 func (n *Nil) expressionNode() {}
+
+// PostfixExpression represents a postfix expression in the AST.
+type PostfixExpression struct {
+	Token    token.Token
+	Operator string
+}
+
+// TokenLiteral returns the literal value of the token associated with the node.
+func (pe *PostfixExpression) TokenLiteral() string {
+	return pe.Token.Literal
+}
+
+// String returns a string representation of the postfix expression.
+func (pe *PostfixExpression) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("(")
+	out.WriteString(pe.Token.Literal)
+	out.WriteString(pe.Operator)
+	out.WriteString(")")
+
+	return out.String()
+}
+
+func (pe *PostfixExpression) expressionNode() {}

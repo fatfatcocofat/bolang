@@ -4,7 +4,6 @@ import (
 	"bo/lexer"
 	"bo/object"
 	"bo/parser"
-	"fmt"
 	"testing"
 )
 
@@ -189,7 +188,6 @@ func TestEvalBooleanExpression(t *testing.T) {
 	}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
-		fmt.Println(evaluated)
 		testBooleanObject(t, evaluated, tt.expected)
 	}
 }
@@ -338,6 +336,14 @@ func TestErrorHandling(t *testing.T) {
 		{
 			`{"name": "Bo"}[fn(x) { x }];`,
 			"unusable as map key: FUNCTION",
+		},
+		{
+			`let x = "a"; x++;`,
+			`invalid left-hand side expression in postfix operation`,
+		},
+		{
+			`let x = "a"; x--;`,
+			`invalid left-hand side expression in postfix operation`,
 		},
 	}
 
@@ -659,5 +665,54 @@ func TestNil(t *testing.T) {
 		if tt.expected != NIL {
 			t.Errorf("object is not NIL. got=%T (%+v)", evaluated, evaluated)
 		}
+	}
+}
+
+func TestPostfixExpression(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		{"let a = 5; a++;", 5},
+		{"let a = 5; a++; a;", 6},
+		{"let a = 5; a--; a;", 4},
+		{"let a = 5; a++; a++; a;", 7},
+		{"let a = 5; a--; a--; a;", 3},
+		{"let a = 5; a++; a--; a;", 5},
+		{"let a = 5; a++; a--; a++; a;", 6},
+		{"let a = 5; a--; a++; a--; a;", 4},
+		{"let a = 5; a++; a++; a--; a--; a;", 5},
+		{"let a = 5; a--; a--; a++; a++; a;", 5},
+		{"let a = 5; a++; a++; a--; a--; a++; a++; a--; a--; a;", 5},
+		{"let a = 5; a++; a++; a--; a--; a++; a++; a--; a--; a++; a++; a--; a--; a;", 5},
+		{"let a = 5; a++; a++; a--; a--; a++; a++; a--; a--; a++; a++; a--; a--; a++; a++; a--; a--; a;", 5},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		testIntegerObject(t, evaluated, int64(tt.expected.(int)))
+	}
+
+	tests = []struct {
+		input    string
+		expected interface{}
+	}{
+		{"let a = 5.5; a++;", 5.5},
+		{"let a = 5.5; a++; a;", 6.5},
+		{"let a = 5.5; a--; a;", 4.5},
+		{"let a = 5.5; a++; a++; a;", 7.5},
+		{"let a = 5.5; a--; a--; a;", 3.5},
+		{"let a = 5.5; a++; a--; a++; a;", 6.5},
+		{"let a = 5.5; a--; a++; a--; a;", 4.5},
+		{"let a = 5.5; a++; a++; a--; a--; a;", 5.5},
+		{"let a = 5.5; a--; a--; a++; a++; a;", 5.5},
+		{"let a = 5.5; a++; a++; a--; a--; a++; a++; a--; a--; a;", 5.5},
+		{"let a = 5.5; a++; a++; a--; a--; a++; a++; a--; a--; a++; a++; a--; a--; a;", 5.5},
+		{"let a = 5.5; a++; a++; a--; a--; a++; a++; a--; a--; a++; a++; a--; a--; a++; a++; a--; a--; a;", 5.5},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		testFloatObject(t, evaluated, tt.expected.(float64))
 	}
 }

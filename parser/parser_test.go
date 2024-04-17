@@ -1043,6 +1043,43 @@ func TestParsingNil(t *testing.T) {
 	}
 }
 
+func TestPostfixExpression(t *testing.T) {
+	postfixTests := []struct {
+		input    string
+		operator string
+		value    interface{}
+	}{
+		{"a++;", "++", "a"},
+		{"a--;", "--", "a"},
+	}
+
+	for _, tt := range postfixTests {
+		l := lexer.New(tt.input)
+		p := New(l)
+
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+
+		if len(program.Statements) != 1 {
+			t.Fatalf("program.Statements does not contain 1 statement. got=%d", len(program.Statements))
+		}
+
+		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+		if !ok {
+			t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T", program.Statements[0])
+		}
+
+		exp, ok := stmt.Expression.(*ast.PostfixExpression)
+		if !ok {
+			t.Fatalf("stmt is not ast.PostfixExpression. got=%T", stmt.Expression)
+		}
+
+		if exp.Operator != tt.operator {
+			t.Fatalf("exp.Operator is not '%s'. got=%s", tt.operator, exp.Operator)
+		}
+	}
+}
+
 func checkParserErrors(t *testing.T, p *Parser) {
 	errors := p.Errors()
 	if len(errors) == 0 {
