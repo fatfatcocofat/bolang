@@ -4,6 +4,7 @@ import (
 	"bo/lexer"
 	"bo/object"
 	"bo/parser"
+	"fmt"
 	"testing"
 )
 
@@ -188,6 +189,7 @@ func TestEvalBooleanExpression(t *testing.T) {
 	}
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
+		fmt.Println(evaluated)
 		testBooleanObject(t, evaluated, tt.expected)
 	}
 }

@@ -301,6 +301,13 @@ func evalStringInfixExpression(operator string, left, right object.Object) objec
 		}
 
 		return nativeBoolToBooleanObject(leftVal.Value == rightVal.Value)
+	case "!=":
+		rightVal, ok := right.(*object.String)
+		if !ok {
+			return TRUE
+		}
+
+		return nativeBoolToBooleanObject(leftVal.Value != rightVal.Value)
 	default:
 		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
 	}
