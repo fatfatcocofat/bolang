@@ -1,6 +1,7 @@
 package repl
 
 import (
+	"bolang/evaluator"
 	"bolang/lexer"
 	"bolang/parser"
 	"os"
@@ -78,8 +79,11 @@ func (r *Repl) Start() {
 				continue
 			}
 
-			r.stdoutWrite(program.String())
-			r.stdoutWrite("\n")
+			evaluated := evaluator.Eval(program)
+			if evaluated != nil {
+				r.stdoutWrite(evaluated.Inspect())
+				r.stdoutWrite("\n")
+			}
 
 			r.saveHistory(line)
 		}
@@ -107,7 +111,15 @@ func (r *Repl) printParserError(errors []string) {
 }
 
 func (r *Repl) isReplCommand(line string) bool {
-	return strings.HasPrefix(line, "!")
+	var replCommands = []string{"!help", "!exit"}
+
+	for _, c := range replCommands {
+		if strings.HasPrefix(line, c) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (r *Repl) PrintBanner() {
