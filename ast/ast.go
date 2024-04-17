@@ -499,3 +499,20 @@ func (ps *PrintStatement) String() string {
 }
 
 func (ps *PrintStatement) statementNode() {}
+
+// Nil represents a nil value in the AST.
+type Nil struct {
+	Token token.Token
+}
+
+// TokenLiteral returns the literal value of the token associated with the node.
+func (n *Nil) TokenLiteral() string {
+	return n.Token.Literal
+}
+
+// String returns a string representation of the nil value.
+func (n *Nil) String() string {
+	return n.Token.Literal
+}
+
+func (n *Nil) expressionNode() {}

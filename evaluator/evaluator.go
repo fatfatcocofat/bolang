@@ -108,7 +108,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalPrintStatement(val)
 	}
 
-	return nil
+	return NIL
 }
 
 func evalProgram(program *ast.Program, env *object.Environment) object.Object {
@@ -238,20 +238,6 @@ func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) obje
 			if rt == object.RETURN_OBJ || rt == object.ERROR_OBJ {
 				return result
 			}
-		}
-	}
-
-	return result
-}
-
-func evalStatements(stmts []ast.Statement, env *object.Environment) object.Object {
-	var result object.Object
-
-	for _, statement := range stmts {
-		result = Eval(statement, env)
-
-		if returnValue, ok := result.(*object.Return); ok {
-			return returnValue.Value
 		}
 	}
 

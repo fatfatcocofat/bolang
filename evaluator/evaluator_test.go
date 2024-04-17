@@ -638,3 +638,20 @@ func testErrorObject(t *testing.T, obj object.Object, expected object.Object) bo
 
 	return true
 }
+
+func TestNil(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected object.Object
+	}{
+		{`nil`, NIL},
+		{`let a = nil; a`, NIL},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		if tt.expected != NIL {
+			t.Errorf("object is not NIL. got=%T (%+v)", evaluated, evaluated)
+		}
+	}
+}

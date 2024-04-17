@@ -1016,6 +1016,21 @@ func TestParsingEmptyMapLiteral(t *testing.T) {
 	}
 }
 
+func TestParsingNil(t *testing.T) {
+	input := "nil"
+
+	l := lexer.New(input)
+	p := New(l)
+
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	stmt := program.Statements[0].(*ast.ExpressionStatement)
+	if stmt.Expression.TokenLiteral() != "nil" {
+		t.Errorf("stmt.Expression.TokenLiteral not 'nil'. got=%q", stmt.Expression.TokenLiteral())
+	}
+}
+
 func checkParserErrors(t *testing.T, p *Parser) {
 	errors := p.Errors()
 	if len(errors) == 0 {
