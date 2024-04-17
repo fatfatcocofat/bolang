@@ -381,6 +381,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseLetStatement()
 	case token.T_RETURN:
 		return p.parseReturnStatement()
+	case token.T_PRINT:
+		return p.parsePrintStatement()
 	default:
 		return p.parseExpressionStatement()
 	}
@@ -414,6 +416,19 @@ func (p *Parser) parseReturnStatement() *ast.ReturnStatement {
 
 	p.nextToken()
 	stmt.ReturnValue = p.parseExpression(LOWEST)
+
+	if p.peekTokenIs(token.T_SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
+
+func (p *Parser) parsePrintStatement() *ast.PrintStatement {
+	stmt := &ast.PrintStatement{Token: p.currentToken}
+
+	p.nextToken()
+	stmt.Value = p.parseExpression(LOWEST)
 
 	if p.peekTokenIs(token.T_SEMICOLON) {
 		p.nextToken()

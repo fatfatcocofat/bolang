@@ -3,6 +3,7 @@ package evaluator
 import (
 	"bolang/ast"
 	"bolang/object"
+	"fmt"
 )
 
 var (
@@ -98,6 +99,13 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalIndexExpression(left, index)
 	case *ast.MapLiteral:
 		return evalMapLiteral(node, env)
+	case *ast.PrintStatement:
+		val := Eval(node.Value, env)
+		if isError(val) {
+			return val
+		}
+
+		return evalPrintStatement(val)
 	}
 
 	return nil
@@ -118,6 +126,29 @@ func evalProgram(program *ast.Program, env *object.Environment) object.Object {
 	}
 
 	return result
+}
+
+func evalPrintStatement(val object.Object) object.Object {
+	switch val := val.(type) {
+	case *object.Integer:
+		fmt.Println(val.Inspect())
+	case *object.Float:
+		fmt.Println(val.Inspect())
+	case *object.String:
+		fmt.Println(val.Inspect())
+	case *object.Boolean:
+		fmt.Println(val.Inspect())
+	case *object.Array:
+		fmt.Println(val.Inspect())
+	case *object.Map:
+		fmt.Println(val.Inspect())
+	case *object.Nil:
+		fmt.Println(val.Inspect())
+	default:
+		fmt.Println(val.Type())
+	}
+
+	return NIL
 }
 
 func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object {

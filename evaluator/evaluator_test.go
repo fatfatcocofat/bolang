@@ -359,8 +359,8 @@ func TestLetStatements(t *testing.T) {
 		{"let a = 5; let b = a; let c = a + b + 5; c;", 15},
 		{"let name = \"Bo\"; name;", "Bo"},
 		{"let name = \"Bo\"; let b = name; b;", "Bo"},
-		// {"let name = \"Bo\"; let b = name; let c = name + b + \"lang\"; c;", "BoBolang"},
-		// {"let name = \"Bo\"; let b = name; let c = name + b + \"lang\"; let d = c + \"v0.1.0\"; d;", "BoBolangv0.1.0"},
+		{"let name = \"Bo\"; let b = name; let c = name + b + \"lang\"; c;", "BoBolang"},
+		{"let name = \"Bo\"; let b = name; let c = name + b + \"lang\"; let d = c + \"v0.1.0\"; d;", "BoBolangv0.1.0"},
 		{"let a = 5; let b = 5.5; a + b;", 10.5},
 		{"let a = 5; let b = 5.5; a * b;", 27.5},
 		{"let a = 5; let b = 5.5; a / b;", 0.9090909090909091},
@@ -586,4 +586,55 @@ func TestMapIndexExpressions(t *testing.T) {
 			testNilObject(t, evaluated)
 		}
 	}
+}
+
+func TestPrintFunction(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected object.Object
+	}{
+		{`print("Hello, World!")`, NIL},
+		{`print(1)`, NIL},
+		{`print(1.0)`, NIL},
+		{`print(true)`, NIL},
+		{`print(false)`, NIL},
+		{`print([1, 2, 3])`, NIL},
+		{`print({ "one": 1, "two": 2 })`, NIL},
+		{`print("Hello, " + "World!")`, NIL},
+		{`print(1 + 2)`, NIL},
+		{`print({ 1: 2 }[1])`, NIL},
+		{`print(myVar)`, newError("identifier not found: myVar")},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		if tt.expected != NIL {
+			testErrorObject(t, evaluated, tt.expected)
+		}
+
+		if tt.expected == NIL {
+			testNilObject(t, evaluated)
+		}
+	}
+}
+
+func testErrorObject(t *testing.T, obj object.Object, expected object.Object) bool {
+	errObj, ok := obj.(*object.Error)
+	if !ok {
+		t.Errorf("object is not Error. got=%T (%+v)", obj, obj)
+		return false
+	}
+
+	expectedErrObj, ok := expected.(*object.Error)
+	if !ok {
+		t.Errorf("expected is not Error. got=%T (%+v)", expected, expected)
+		return false
+	}
+
+	if errObj.Message != expectedErrObj.Message {
+		t.Errorf("wrong error message. expected=%q, got=%q", expectedErrObj.Message, errObj.Message)
+		return false
+	}
+
+	return true
 }

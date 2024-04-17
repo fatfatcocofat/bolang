@@ -475,3 +475,27 @@ func (ml *MapLiteral) String() string {
 }
 
 func (ml *MapLiteral) expressionNode() {}
+
+// PrintStatement represents a print statement in the AST.
+type PrintStatement struct {
+	Token token.Token
+	Value Expression
+}
+
+// TokenLiteral returns the literal value of the token associated with the node.
+func (ps *PrintStatement) TokenLiteral() string {
+	return ps.Token.Literal
+}
+
+// String returns a string representation of the print statement.
+func (ps *PrintStatement) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("print ")
+	out.WriteString(ps.Value.String())
+	out.WriteString(";")
+
+	return out.String()
+}
+
+func (ps *PrintStatement) statementNode() {}

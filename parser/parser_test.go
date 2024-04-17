@@ -74,6 +74,49 @@ func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
 	return true
 }
 
+func TestPrintStatement(t *testing.T) {
+	input := `print(5);`
+
+	l := lexer.New(input)
+	p := New(l)
+
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if program == nil {
+		t.Fatalf("ParseProgram() returned nil")
+	}
+
+	if len(program.Statements) != 1 {
+		t.Fatalf("program.Statements does not contain 1 statement. got=%d", len(program.Statements))
+	}
+
+	stmt := program.Statements[0]
+	if !testPrintStatement(t, stmt) {
+		return
+	}
+}
+
+func testPrintStatement(t *testing.T, s ast.Statement) bool {
+	if s.TokenLiteral() != "print" {
+		t.Errorf("s.TokenLiteral not 'print'. got=%q", s.TokenLiteral())
+		return false
+	}
+
+	printStmt, ok := s.(*ast.PrintStatement)
+	if !ok {
+		t.Errorf("s not *ast.PrintStatement. got=%T", s)
+		return false
+	}
+
+	if printStmt.TokenLiteral() != "print" {
+		t.Errorf("printStmt.TokenLiteral not 'print'. got=%q", printStmt.TokenLiteral())
+		return false
+	}
+
+	return true
+}
+
 func TestReturnStatements(t *testing.T) {
 	input := `return 5;`
 

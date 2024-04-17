@@ -79,6 +79,19 @@ func TestNextToken(t *testing.T) {
 	nil;
 
 	let myMap = {1: 2, 3: 4};
+
+	print("Hello, World!");
+	print(1);
+	print(1.0);
+	print(true);
+	print(false);
+	print(nil);
+	print([1, 2, 3]);
+	print({1: 2, 3: 4});
+	print("Hello, " + "World!");
+	print(1 + 2);
+	print(myMap[1]);
+	print(myVar);
 	`
 
 	tests := []struct {
@@ -315,6 +328,87 @@ func TestNextToken(t *testing.T) {
 		{token.T_COLON, ":"},
 		{token.T_INT, "4"},
 		{token.T_RBRACE, "}"},
+		{token.T_SEMICOLON, ";"},
+		{token.T_PRINT, "print"},
+		{token.T_LPAREN, "("},
+		{token.T_STRING, "Hello, World!"},
+		{token.T_RPAREN, ")"},
+		{token.T_SEMICOLON, ";"},
+		{token.T_PRINT, "print"},
+		{token.T_LPAREN, "("},
+		{token.T_INT, "1"},
+		{token.T_RPAREN, ")"},
+		{token.T_SEMICOLON, ";"},
+		{token.T_PRINT, "print"},
+		{token.T_LPAREN, "("},
+		{token.T_FLOAT, "1.0"},
+		{token.T_RPAREN, ")"},
+		{token.T_SEMICOLON, ";"},
+		{token.T_PRINT, "print"},
+		{token.T_LPAREN, "("},
+		{token.T_TRUE, "true"},
+		{token.T_RPAREN, ")"},
+		{token.T_SEMICOLON, ";"},
+		{token.T_PRINT, "print"},
+		{token.T_LPAREN, "("},
+		{token.T_FALSE, "false"},
+		{token.T_RPAREN, ")"},
+		{token.T_SEMICOLON, ";"},
+		{token.T_PRINT, "print"},
+		{token.T_LPAREN, "("},
+		{token.T_NIL, "nil"},
+		{token.T_RPAREN, ")"},
+		{token.T_SEMICOLON, ";"},
+		{token.T_PRINT, "print"},
+		{token.T_LPAREN, "("},
+		{token.T_LBRACKET, "["},
+		{token.T_INT, "1"},
+		{token.T_COMMA, ","},
+		{token.T_INT, "2"},
+		{token.T_COMMA, ","},
+		{token.T_INT, "3"},
+		{token.T_RBRACKET, "]"},
+		{token.T_RPAREN, ")"},
+		{token.T_SEMICOLON, ";"},
+		{token.T_PRINT, "print"},
+		{token.T_LPAREN, "("},
+		{token.T_LBRACE, "{"},
+		{token.T_INT, "1"},
+		{token.T_COLON, ":"},
+		{token.T_INT, "2"},
+		{token.T_COMMA, ","},
+		{token.T_INT, "3"},
+		{token.T_COLON, ":"},
+		{token.T_INT, "4"},
+		{token.T_RBRACE, "}"},
+		{token.T_RPAREN, ")"},
+		{token.T_SEMICOLON, ";"},
+		{token.T_PRINT, "print"},
+		{token.T_LPAREN, "("},
+		{token.T_STRING, "Hello, "},
+		{token.T_PLUS, "+"},
+		{token.T_STRING, "World!"},
+		{token.T_RPAREN, ")"},
+		{token.T_SEMICOLON, ";"},
+		{token.T_PRINT, "print"},
+		{token.T_LPAREN, "("},
+		{token.T_INT, "1"},
+		{token.T_PLUS, "+"},
+		{token.T_INT, "2"},
+		{token.T_RPAREN, ")"},
+		{token.T_SEMICOLON, ";"},
+		{token.T_PRINT, "print"},
+		{token.T_LPAREN, "("},
+		{token.T_IDENT, "myMap"},
+		{token.T_LBRACKET, "["},
+		{token.T_INT, "1"},
+		{token.T_RBRACKET, "]"},
+		{token.T_RPAREN, ")"},
+		{token.T_SEMICOLON, ";"},
+		{token.T_PRINT, "print"},
+		{token.T_LPAREN, "("},
+		{token.T_IDENT, "myVar"},
+		{token.T_RPAREN, ")"},
 		{token.T_SEMICOLON, ";"},
 		{token.T_EOF, ""},
 	}
