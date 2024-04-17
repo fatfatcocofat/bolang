@@ -4,8 +4,6 @@
 
 This project is inspired by the book [Writing An Interpreter In Go](https://interpreterbook.com/) by Thorsten Ball. The goal is to build a simple programming language that can be used to learn about programming language design and implementation. The language is called BoLang, named after my cat Bo. BoLang is a simple language that supports arithmetic operations, variables, functions, and control structures. The language is interpreted and implemented in Go. The interpreter is a work in progress and new features will be added over time.
 
-> **Note:** This project is a work in progress and is not yet complete. The interpreter is still under development and new features will be added over time.
-
 ## Features
 
 - [x] Arithmetic operations

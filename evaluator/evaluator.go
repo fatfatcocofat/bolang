@@ -29,7 +29,6 @@ func Eval(node ast.Node) object.Object {
 		if isError(right) {
 			return right
 		}
-
 		return evalPrefixExpression(node.Operator, right)
 	case *ast.InfixExpression:
 		left := Eval(node.Left)
@@ -41,8 +40,11 @@ func Eval(node ast.Node) object.Object {
 		if isError(right) {
 			return right
 		}
-
 		return evalInfixExpression(node.Operator, left, right)
+	case *ast.BlockStatement:
+		return evalStatements(node.Statements)
+	case *ast.IfExpression:
+		return evalIfExpression(node)
 	}
 
 	return nil
@@ -222,6 +224,36 @@ func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
 	}
 
 	return newError("unknown operator: -%s", right.Type())
+}
+
+func evalIfExpression(ie *ast.IfExpression) object.Object {
+	condition := Eval(ie.Condition)
+	if isError(condition) {
+		return condition
+	}
+
+	if isTruthy(condition) {
+		return Eval(ie.Consequence)
+	}
+
+	if ie.Alternative != nil {
+		return Eval(ie.Alternative)
+	}
+
+	return NIL
+}
+
+func isTruthy(obj object.Object) bool {
+	switch obj {
+	case NIL:
+		return false
+	case TRUE:
+		return true
+	case FALSE:
+		return false
+	default:
+		return true
+	}
 }
 
 func nativeBoolToBooleanObject(input bool) *object.Boolean {
