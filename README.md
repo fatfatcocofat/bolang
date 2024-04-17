@@ -2,6 +2,14 @@
 
 > BoLang is a Toy Programming Language implemented in Go.
 
+What Does Toy Language Mean?
+Toy language refers to any computer programming language that is not considered to be suitable or capable for building general purpose and high-end software and applications. It can be any programming language that lacks the advanced features, capabilities, programming constructs and paradigms of high level language. Toy language may also be termed esoteric programming language.
+
+Techopedia Explains Toy Language
+Toy language was primarily created as a means of programming language research and education, proof of concept for a computer science or programming theory and to create a prototype for a new programming language. Typically, toy language has all the capabilities to perform simple to complex mathematical and programming computations. However, it has an incapability in terms of lesser or no library programs support, missing programming constructs such as pointers and arrays, which limits it in creating general-use programs and applications. Pascal, Treelang and Logo are popular examples of toy language.
+
+> Quote from [Techopedia](https://www.techopedia.com/definition/22609/toy-language)
+
 This project is inspired by the book [Writing An Interpreter In Go](https://interpreterbook.com/) by Thorsten Ball. The goal of this project is to learn more about programming languages, interpreters, and compilers. BoLang is a toy programming language that is simple and easy to understand. It is not intended to be used in production.
 
 ## Features
