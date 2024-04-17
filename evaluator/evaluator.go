@@ -55,6 +55,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 			return right
 		}
 		return evalInfixExpression(node.Operator, left, right)
+	case *ast.PostfixExpression:
+		return evalPostfixExpression(node, env)
 	case *ast.IfExpression:
 		return evalIfExpression(node, env)
 	case *ast.ReturnStatement:
@@ -431,6 +433,62 @@ func evalPrefixExpression(operator string, right object.Object) object.Object {
 		return evalMinusPrefixOperatorExpression(right)
 	default:
 		return newError("unknown operator: %s%s", operator, right.Type())
+	}
+}
+
+func evalPostfixExpression(node *ast.PostfixExpression, env *object.Environment) object.Object {
+	operator := node.Operator
+	switch operator {
+	case "++":
+		return evalPostfixIncrementExpression(node, env)
+	case "--":
+		return evalPostfixDecrementExpression(node, env)
+	default:
+		return newError("unknown operator: %s", operator)
+	}
+}
+
+func evalPostfixIncrementExpression(node *ast.PostfixExpression, env *object.Environment) object.Object {
+	val, ok := env.Get(node.Token.Literal)
+	if !ok {
+		return newError("identifier not found: " + node.Token.Literal)
+	}
+
+	switch val := val.(type) {
+	case *object.Integer:
+		oldValue := val.Value
+		val.Value++
+		env.Set(node.Token.Literal, val)
+		return &object.Integer{Value: oldValue}
+	case *object.Float:
+		oldValue := val.Value
+		val.Value++
+		env.Set(node.Token.Literal, val)
+		return &object.Float{Value: oldValue}
+	default:
+		return newError("invalid left-hand side expression in postfix operation")
+	}
+}
+
+func evalPostfixDecrementExpression(node *ast.PostfixExpression, env *object.Environment) object.Object {
+	val, ok := env.Get(node.Token.Literal)
+	if !ok {
+		return newError("identifier not found: " + node.Token.Literal)
+	}
+
+	switch val := val.(type) {
+	case *object.Integer:
+		oldValue := val.Value
+		val.Value--
+		env.Set(node.Token.Literal, val)
+		return &object.Integer{Value: oldValue}
+	case *object.Float:
+		oldValue := val.Value
+		val.Value--
+		env.Set(node.Token.Literal, val)
+		return &object.Float{Value: oldValue}
+	default:
+		return newError("invalid left-hand side expression in postfix operation")
 	}
 }
 
