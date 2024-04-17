@@ -446,3 +446,32 @@ func (ie *IndexExpression) String() string {
 }
 
 func (ie *IndexExpression) expressionNode() {}
+
+// MapLiteral represents a map literal in the AST.
+type MapLiteral struct {
+	Token token.Token
+	Pairs map[Expression]Expression
+}
+
+// TokenLiteral returns the literal value of the token associated with the node.
+func (ml *MapLiteral) TokenLiteral() string {
+	return ml.Token.Literal
+}
+
+// String returns a string representation of the map literal.
+func (ml *MapLiteral) String() string {
+	var out bytes.Buffer
+
+	pairs := []string{}
+	for key, value := range ml.Pairs {
+		pairs = append(pairs, key.String()+": "+value.String())
+	}
+
+	out.WriteString("{")
+	out.WriteString(strings.Join(pairs, ", "))
+	out.WriteString("}")
+
+	return out.String()
+}
+
+func (ml *MapLiteral) expressionNode() {}

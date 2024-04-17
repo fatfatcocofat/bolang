@@ -329,6 +329,10 @@ func TestErrorHandling(t *testing.T) {
 			"foobar",
 			"identifier not found: foobar",
 		},
+		{
+			`{"name": "Bo"}[fn(x) { x }];`,
+			"unusable as map key: FUNCTION",
+		},
 	}
 
 	for _, tt := range tests {
@@ -497,6 +501,80 @@ func TestArrayIndexExpressions(t *testing.T) {
 		{"let arr = [1, 2, 3]; let i = arr[0]; arr[i];", 2},
 		{"[1, 2, 3][3]", nil},
 		{"[1, 2, 3][-1]", nil},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		switch expected := tt.expected.(type) {
+		case int:
+			testIntegerObject(t, evaluated, int64(expected))
+		case nil:
+			testNilObject(t, evaluated)
+		}
+	}
+}
+
+func TestMapLiterals(t *testing.T) {
+	input := `
+		let two = "two";
+		{
+			"one": 10 - 9,
+			two: 1 + 1,
+			"thr" + "ee": 6 / 2,
+			4: 4,
+			3.0: 3.0,
+			true: 5,
+			false: 6,
+		}
+	`
+
+	evaluated := testEval(input)
+	result, ok := evaluated.(*object.Map)
+	if !ok {
+		t.Fatalf("object is not Map. got=%T (%+v)", evaluated, evaluated)
+	}
+
+	expected := map[object.MapKey]int64{
+		(&object.String{Value: "one"}).MapKey():   1,
+		(&object.String{Value: "two"}).MapKey():   2,
+		(&object.String{Value: "three"}).MapKey(): 3,
+		(&object.Integer{Value: 4}).MapKey():      4,
+		(&object.Float{Value: 3.0}).MapKey():      3.0,
+		TRUE.MapKey():                             5,
+		FALSE.MapKey():                            6,
+	}
+
+	if len(result.Pairs) != len(expected) {
+		t.Fatalf("map has wrong number of pairs. got=%d", len(result.Pairs))
+	}
+
+	for expectedKey, expectedValue := range expected {
+		pair, ok := result.Pairs[expectedKey]
+		if !ok {
+			t.Errorf("no pair for given key in Pairs")
+		}
+
+		switch v := pair.Value.(type) {
+		case *object.Integer:
+			testIntegerObject(t, &object.Integer{Value: v.Value}, expectedValue)
+		case *object.Float:
+			testFloatObject(t, &object.Float{Value: v.Value}, float64(expectedValue))
+		}
+	}
+}
+
+func TestMapIndexExpressions(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		{`let two = "two"; { "one": 10, two: 2 }["one"]`, 10},
+		{`let two = "two"; { "one": 10, two: 2 }[two]`, 2},
+		{`{ 1: 10, 2: 2 }[1]`, 10},
+		{`{ 1: 10, 2: 2 }[2]`, 2},
+		{`let two = "two"; { "one": 10, two: 2 }["thr" + "ee"]`, nil},
+		{`{ 1: 10, 2: 2 }[3]`, nil},
+		{`{ 1: 10, 2: 2 }[-1]`, nil},
 	}
 
 	for _, tt := range tests {

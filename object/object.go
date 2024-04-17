@@ -22,6 +22,7 @@ const (
 	FUNCTION_OBJ = "FUNCTION"
 	BUILTIN_OBJ  = "BUILTIN"
 	ARRAY_OBJ    = "ARRAY"
+	MAP_OBJ      = "MAP"
 )
 
 // The Integer struct represents an integer object.

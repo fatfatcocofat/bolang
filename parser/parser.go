@@ -72,6 +72,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.T_IF, p.parseIfExpression)
 	p.registerPrefix(token.T_FUNCTION, p.parseFunctionLiteral)
 	p.registerPrefix(token.T_LBRACKET, p.parseArrayLiteral)
+	p.registerPrefix(token.T_LBRACE, p.parseMapLiteral)
 
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
 	p.registerInfix(token.T_PLUS, p.parseInfixExpression)
@@ -219,6 +220,36 @@ func (p *Parser) parseBlockStatement() *ast.BlockStatement {
 	}
 
 	return block
+}
+
+func (p *Parser) parseMapLiteral() ast.Expression {
+	lit := &ast.MapLiteral{Token: p.currentToken}
+	lit.Pairs = make(map[ast.Expression]ast.Expression)
+
+	for !p.peekTokenIs(token.T_RBRACE) {
+		p.nextToken()
+
+		key := p.parseExpression(LOWEST)
+
+		if !p.expectPeek(token.T_COLON) {
+			return nil
+		}
+
+		p.nextToken()
+		value := p.parseExpression(LOWEST)
+
+		lit.Pairs[key] = value
+
+		if !p.peekTokenIs(token.T_RBRACE) && !p.expectPeek(token.T_COMMA) {
+			return nil
+		}
+	}
+
+	if !p.expectPeek(token.T_RBRACE) {
+		return nil
+	}
+
+	return lit
 }
 
 func (p *Parser) parseArrayLiteral() ast.Expression {
