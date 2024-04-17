@@ -1,7 +1,6 @@
 package object
 
 import (
-	"bolang/ast"
 	"fmt"
 )
 
@@ -61,32 +60,3 @@ type Nil struct{}
 
 func (n *Nil) Type() ObjectType { return NIL_OBJ }
 func (n *Nil) Inspect() string  { return "nil" }
-
-// The Return struct represents a return object.
-type Return struct {
-	Value Object
-}
-
-func (r *Return) Type() ObjectType { return RETURN_OBJ }
-func (r *Return) Inspect() string  { return r.Value.Inspect() }
-
-// The Error struct represents an error object.
-type Error struct {
-	Message string
-}
-
-func (e *Error) Type() ObjectType { return ERROR_OBJ }
-func (e *Error) Inspect() string  { return "ERROR: " + e.Message }
-
-// The Function struct represents a function object.
-type Function struct {
-	Parameters []*ast.Identifier
-	Body       *ast.BlockStatement
-	Env        *Environment
-}
-
-func (f *Function) Type() ObjectType { return FUNCTION_OBJ }
-func (f *Function) Inspect() string {
-	return fmt.Sprintf("fn(%s) {\n%s\n}",
-		f.Parameters, f.Body.String())
-}
