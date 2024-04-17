@@ -76,7 +76,3 @@ nil
 ## Contributing
 
 Contributions to BoLang are welcome. Please feel free to submit a pull request or open an issue.
-
-```
-
-```
