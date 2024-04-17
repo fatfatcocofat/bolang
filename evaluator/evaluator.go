@@ -151,10 +151,43 @@ func evalInfixExpression(operator string, left, right object.Object) object.Obje
 		return evalMixedInfixExpression(operator, left, right)
 	case left.Type() == object.BOOLEAN_OBJ && right.Type() == object.BOOLEAN_OBJ:
 		return evalBooleanInfixExpression(operator, left, right)
+	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
+		return evalStringInfixExpression(operator, left, right)
+	case left.Type() == object.STRING_OBJ && right.Type() == object.INTEGER_OBJ:
+		return evalStringInfixExpression(operator, left, right)
 	case operator == "==":
 		return nativeBoolToBooleanObject(left == right)
 	case operator == "!=":
 		return nativeBoolToBooleanObject(left != right)
+	default:
+		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
+	}
+}
+
+func evalStringInfixExpression(operator string, left, right object.Object) object.Object {
+	leftVal := left.(*object.String)
+
+	switch operator {
+	case "+":
+		rightVal, ok := right.(*object.String)
+		if !ok {
+			return newError("non-string argument for string concatenation: %s", right.Type())
+			// rightVal = &object.String{Value: right.Inspect()}
+		}
+
+		return &object.String{Value: leftVal.Value + rightVal.Value}
+	case "*":
+		rightVal, ok := right.(*object.Integer)
+		if !ok {
+			return newError("non-integer argument for string multiplication: %s", right.Type())
+		}
+
+		result := ""
+		for i := 0; i < int(rightVal.Value); i++ {
+			result += leftVal.Value
+		}
+
+		return &object.String{Value: result}
 	default:
 		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
 	}
