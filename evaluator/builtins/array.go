@@ -75,3 +75,24 @@ func builtinArrayPop(args ...object.Object) object.Object {
 
 	return NIL
 }
+
+// builtinArrayShift removes the first element from the given array.
+func builtinArrayShift(args ...object.Object) object.Object {
+	if len(args) != 1 {
+		return Error("wrong number of arguments. got=%d, want=1", len(args))
+	}
+
+	if args[0].Type() != object.ARRAY_OBJ {
+		return Error("argument to `array_shift` must be ARRAY, got %s", args[0].Type())
+	}
+
+	arr := args[0].(*object.Array)
+	length := len(arr.Elements)
+	if length > 0 {
+		shifted := arr.Elements[0]
+		arr.Elements = arr.Elements[1:]
+		return shifted
+	}
+
+	return NIL
+}

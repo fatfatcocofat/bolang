@@ -17,6 +17,7 @@ var BuiltinsFn = map[string]*object.Builtin{
 	"array_last":  object.NewBuiltin(builtinArrayLast),
 	"array_push":  object.NewBuiltin(builtinArrayPush),
 	"array_pop":   object.NewBuiltin(builtinArrayPop),
+	"array_shift": object.NewBuiltin(builtinArrayShift),
 }
 
 // builtinLen returns the length of the given object.
