@@ -1,9 +1,9 @@
 package evaluator
 
 import (
-	"bolang/ast"
-	"bolang/evaluator/builtins"
-	"bolang/object"
+	"bo/ast"
+	"bo/evaluator/builtins"
+	"bo/object"
 	"fmt"
 )
 

@@ -1,6 +1,6 @@
 package builtins
 
-import "bolang/object"
+import "bo/object"
 
 // builtinArrayFirst returns the first element of the given array.
 func builtinArrayFirst(args ...object.Object) object.Object {

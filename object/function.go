@@ -1,7 +1,7 @@
 package object
 
 import (
-	"bolang/ast"
+	"bo/ast"
 	"fmt"
 )
 

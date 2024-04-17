@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bolang/repl"
+	"bo/repl"
 	"os"
 )
 

@@ -1,7 +1,7 @@
 package builtins
 
 import (
-	"bolang/object"
+	"bo/object"
 	"fmt"
 )
 

@@ -1,9 +1,9 @@
 package evaluator
 
 import (
-	"bolang/lexer"
-	"bolang/object"
-	"bolang/parser"
+	"bo/lexer"
+	"bo/object"
+	"bo/parser"
 	"testing"
 )
 

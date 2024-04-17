@@ -1,7 +1,7 @@
 package ast
 
 import (
-	"bolang/token"
+	"bo/token"
 	"bytes"
 	"strings"
 )

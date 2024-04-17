@@ -1,9 +1,9 @@
 package parser
 
 import (
-	"bolang/ast"
-	"bolang/lexer"
-	"bolang/token"
+	"bo/ast"
+	"bo/lexer"
+	"bo/token"
 	"fmt"
 	"strconv"
 )

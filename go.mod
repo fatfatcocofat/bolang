@@ -1,4 +1,4 @@
-module bolang
+module bo
 
 go 1.21.5
 

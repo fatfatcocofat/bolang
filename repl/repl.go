@@ -1,10 +1,10 @@
 package repl
 
 import (
-	"bolang/evaluator"
-	"bolang/lexer"
-	"bolang/object"
-	"bolang/parser"
+	"bo/evaluator"
+	"bo/lexer"
+	"bo/object"
+	"bo/parser"
 	"os"
 	"strings"
 
