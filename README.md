@@ -1,6 +1,6 @@
-# BO-LANG (Bo Programming Language)
+# Bo (Bo Lang) - The Bo Programming Language (WIP)
 
-> BoLang is a Toy Programming Language implemented in Go.
+> IT IS USED FOR EDUCATIONAL PURPOSES AND TO DEMONSTRATE THEORETICAL CONCEPTS.
 
 What Does Toy Language Mean?
 Toy language refers to any computer programming language that is not considered to be suitable or capable for building general purpose and high-end software and applications. It can be any programming language that lacks the advanced features, capabilities, programming constructs and paradigms of high level language. Toy language may also be termed esoteric programming language.
@@ -10,69 +10,41 @@ Toy language was primarily created as a means of programming language research a
 
 > Quote from [Techopedia](https://www.techopedia.com/definition/22609/toy-language)
 
-This project is inspired by the book [Writing An Interpreter In Go](https://interpreterbook.com/) by Thorsten Ball. The goal of this project is to learn more about programming languages, interpreters, and compilers. BoLang is a toy programming language that is simple and easy to understand. It is not intended to be used in production.
+Bo is a simple programming language that I am building for fun and learning purposes. It is a statically typed language with a syntax similar to Ruby and Go. The language is still in its early stages of development and is not yet ready for use. Bo is written in Go and uses the `antlr4` library for parsing.
 
-## Features
+## Example
 
-- [x] Arithmetic operations
-- [x] Variables
-- [x] Functions
-- [x] Control structures (if, else, for, forever)
-- [x] Comments
-- [x] Error handling
-- [x] Coming soon...
+```go
+// In Bo, `main` is not required
 
-## Getting Started
+// Importing modules (not yet implemented)
+require <bo/fmt> // import standard library
+require "path/to/bo-bo.bo" // import local file
 
-```bash
-# Clone the repository
-git clone git@github.com:fatfatcocofat/bolang.git
-cd bolang
+// Variables
+int x = 10
+float y = 10.5
+string name = "Bo"
+bool isTrue = true
 
-# Build the interpreter
-go build
-
-# Run the interpreter
-./bo
-
-# Install the interpreter
-go install
+// Built-in functions
+println("Hello, World!")
+println("x:", x, "y:", y)
 ```
 
-## Examples
+## Development
+
+Bo is still in its early stages of development. The language is not yet ready for use. If you are interested in contributing, feel free to open an issue or submit a pull request :)
+
+#### Generate parser
 
 ```bash
-# Run the interpreter
-❯ bo # assuming you have the interpreter installed in your PATH environment variable
-
-   _____    _____
-  /\  __/\  ) ___ (
-  ) )(_ ) )/ /\_/\ \
- / / __/ // /_/ (_\ \
- \ \  _\ \\ \ )_/ / /_
-  ) )(__) )\ \/_\/ //_/\
-  \/____\/  )_____( \_\/
-
-Welcome to BoLang v0.1.0.
-Type !help to see the help message.
->> print("Hello, World!")
-Hello, World!
-nil
->> let x = 10
-nil
->> print(x)
-10
-nil
->> let add = fn(a, b) { return a + b }
-nil
->> print(add(10, 20))
-30
-nil
->> if (x > 5) { print("x is greater than 5") } else { print("x is less than or equal to 5") }
-x is greater than 5
-nil
->> ...and so on
+sh genparser.sh
 ```
+
+## License
+
+[MIT LICENSE](LICENSE)
 
 ## Resources
 
@@ -81,7 +53,3 @@ nil
 - [Writing A Compiler In Go](https://compilerbook.com/): A book by Thorsten Ball that walks through building a compiler in Go.
 - [The Dragon Book](https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools): A book by Alfred V. Aho, Monica S. Lam, Ravi Sethi, and Jeffrey D. Ullman that covers compiler design.
 - [Crafting Interpreters](https://craftinginterpreters.com/): A book by Bob Nystrom that covers building interpreters and compilers.
-
-## Contributing
-
-Contributions to BoLang are welcome. Please feel free to submit a pull request or open an issue.
