@@ -33,10 +33,6 @@
 # Go vendor directory
 /vendor/
 
-# Go module cache
-/go.sum
-/go.mod
-
 # IDE specific files
 .idea/
 .vscode/
