@@ -16,6 +16,9 @@
 # Bo-Lang binary
 /bo
 
+# Antlr IDE generated files
+/grammar/.antlr/
+
 # Go test and benchmark files
 *.test
 *.prof
